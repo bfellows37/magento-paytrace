@@ -1,0 +1,11 @@
+<config>
+	<modules>
+		<Bradfellows_PayTrace>
+			<active>true</active>
+			<codePool>local</codePool>
+			<depends>
+				<Mage_Paygate />
+			</depends>
+		</Bradfellows_PayTrace>
+	</modules>
+</config>

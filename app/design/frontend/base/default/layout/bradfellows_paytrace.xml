@@ -1,0 +1,18 @@
+<layout>
+	<customer_account>
+		<reference name="customer_account_navigation">
+			<action method="addLink">
+				<name>manage_stored_payments</name>
+				<path>paytrace/manage/index</path>
+				<label>Manage Stored Payments</label>
+			</action>
+		</reference>
+	</customer_account>
+	
+	<paytrace_manage_index>
+		<update handle="customer_account"/>
+		<reference name="my.account.wrapper">
+			<block type="core/template" name="paytrace_manage" template="paytrace_manage.phtml"/>
+		</reference>
+	</paytrace_manage_index>
+</layout>

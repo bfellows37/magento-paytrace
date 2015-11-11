@@ -1,0 +1,14 @@
+<?php
+//$demo = self::DEMO_ACCOUNT;
+//$test = self::TEST_MODE;
+$info = $this->getInfo();
+$last4 = $info->getCcLast4();
+$ai = unserialize($info->getAdditionalData());
+?>
+
+<?php if($ai['cc_token'] == 'manual'): ?>
+Manual entry<br/>
+<?php else: ?> 
+Stored card<br/>
+<?php endif; ?>
+xxxx <?php echo $last4; ?>

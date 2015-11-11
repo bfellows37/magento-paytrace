@@ -1,0 +1,187 @@
+<div class="dashboard" data-ng-app>
+	<div data-ng-controller="PaymentManage">
+		<div class="page-title">
+			<h1>Manage Stored Payments</h1>
+		</div>
+	    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+	    <div class="box-account box-info">
+	        <div class="box-head">
+	            <h2><?php echo $this->__('Stored Payment Methods') ?></h2>
+	        </div>
+	        <div ng-show="StoredMethods == null">Loading payment methods...</div>
+	        <div ng-show="StoredMethods != null && StoredMethods.length < 1"><em>No payment methods currently stored.</em></div>
+	        <div class='payment-method-box' data-ng-repeat="(k,Method) in StoredMethods">
+	        		<button data-ng-click="DeleteMethod(Method.token_id)" class='payment-method-delete'>x</button>
+	        		<div><span class='payment-method-name'>{{Method.name}}</div></span>
+	        		<div><span class='payment-method-cardtype'>{{Method.cardtype}}</span> <span class='payment-method-last4'>ending with {{Method.last4}}</span></div>
+	        		<div><span class='payment-method-expires'>Exp. {{Method.expires}}</span></div>
+	        </div><!-- /.payment-method-box -->
+	        <div class='clearfix'></div>
+	    </div>
+	    <div class="box-account box-info">
+	        <div class="box-head">
+	            <h2><?php echo $this->__('Add Stored Payment') ?></h2>
+	        </div>
+	        <form id='add-stored-method' data-ng-submit="AddMethod()">
+	        	<div class='field form-field'>
+	        		<label class='required' for='new-payment-name'>Name on Card</label>
+	        		<input data-ng-model="NewMethod.Name" class="input-text required-entry" type='text' name='new-payment-name' id='new-payment-name'/>
+	        	</div>
+	        	<div class='field form-field'>
+	        		<label class='required' for='new-payment-cc-type'>Card type</label>
+	        		<select data-ng-model="NewMethod.CardType" title="Card type" class='validate-select required-entry'>
+	        			<option></option>
+	        			<option value='VI'>VISA</option>
+	        			<option value='MC'>MasterCard</option>
+	        		</select>
+	        	</div>
+	        	<div class='field form-field'>
+	        		<label class='required' for='new-payment-cc-num'>Card Number</label>
+	        		<input data-ng-model="NewMethod.CcNum" class="input-text required-entry" type='text' name='new-payment-cc-num' id='new-payment-cc-num'/>
+	        	</div>
+	        	<div class='field form-field'>
+	        		<label class='required' for='new-payment-cc-exp'>Expiration</label>
+	        		<select data-ng-model="NewMethod.Month" title="Select month" class='validate-select required-entry'>
+	        			<option></option>
+	        			<?php for($m=1;$m<13;$m++): ?>
+	        			<option><?php echo sprintf("%'.02d",$m); ?></option>
+	        			<?php endfor; ?>
+	        		</select> /
+	        		<select data-ng-model="NewMethod.Year" title="Select year" class='validate-select required-entry'>
+	        			<option></option>
+	        			<?php for($y=date("y");$y<date("y")+6;$y++):?>
+	        			<option><?php echo $y; ?></option>
+	        			<?php endfor; ?>
+	        		</select>
+	        	</div>
+	        	<div class='field form-field'>
+	        		<input type='submit' class="button btn" value='Add'>
+	        	</div>
+	        </form>
+	    </div>
+    </div>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+
+<script type='text/javascript'>
+	var methodForm = new VarienForm('add-stored-method');
+
+	function PaymentManage($scope, $http) {
+	
+		$scope.StoredMethods = null;
+		$scope.NewMethod = null;
+		$scope.BaseUrl = '<?php echo Mage::getBaseUrl(); ?>';
+		
+		$scope.GetStoredMethods = function(){
+			
+			$scope.StoredMethods = null;
+			$scope.NewMethod = null;
+			
+			$http.get(
+				$scope.BaseUrl+'/tokenizedpayments/manage/list'
+			).
+			success(function(data, status){
+				console.log(data);
+				
+				// this is just to make it friendly on display
+				for(var i=0;i<data.length;i=i+1){
+					switch(data[i].cardtype){
+						case 'VI':
+							data[i].cardtype = 'Visa';
+							break;
+						case 'MC':
+							data[i].cardtype = 'MasterCard';
+							break;
+					} 
+				}
+				$scope.StoredMethods = data;
+			}).
+			error(function(data, status){
+				console.log("ERROR");
+				console.log(data);
+			});
+		}
+		
+		$scope.AddMethod = function(){
+
+			//console.log($scope.NewMethod);
+			$http({
+					method: 'POST',
+					url: $scope.BaseUrl+'/tokenizedpayments/manage/add',
+					data: jQuery.param($scope.NewMethod),
+					headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				}
+			).
+			success(function(data, status){
+				if(!data.success){
+					alert('There was an error saving your card information, please double check the card number and expiration date.');
+				} else {
+					$scope.GetStoredMethods();
+				}
+			}).
+			error(function(data, status){
+				alert('There was an error communicating with the server.');
+			});
+		}
+		
+		$scope.DeleteMethod = function(token_id){
+			console.log(token_id);
+			$http({
+					method: 'POST',
+					url: $scope.BaseUrl+'/tokenizedpayments/manage/remove',
+					data: jQuery.param({TokenId: token_id}),
+					headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				}
+			).
+			success(function(data, status){
+				if(!data.success){
+					alert('There was an error removing your card information. If this persists, please contact us.');
+				} else {
+					$scope.GetStoredMethods();
+				}
+			}).
+			error(function(data, status){
+				alert('There was an error communicating with the server.');
+			});
+		}
+		
+		$scope.logMethods = function(){
+			console.log($scope.StoredMethods);
+		}
+		
+		var init = function(){
+			$scope.GetStoredMethods();
+		}
+		
+		init();
+	}
+</script>
+
+<style>
+	div.payment-method-box {
+		width:28%;
+		float:left;
+		margin:10px 10px 10px 0;
+		padding:10px;
+		background-color:#ededed;
+		border:1px solid #ddd;
+	}
+	
+	div.form-field {
+		margin-top:10px;
+	}
+	
+	button.payment-method-delete {
+		float:right;
+		background-color:#a61323;
+		color:#fff;
+		border:1px solid #ddd;
+		padding-left:3px;
+		padding-right:3px;
+	}
+	
+	form#add-stored-method label {
+		display:block;
+	}
+</style>

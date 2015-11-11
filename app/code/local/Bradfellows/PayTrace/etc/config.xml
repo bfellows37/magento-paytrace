@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Bradfellows_PayTrace>
+			<version>0.1.0</version>
+		</Bradfellows_PayTrace>
+	</modules>
+
+	<global>
+		<blocks>
+			<paytrace>
+				<class>Bradfellows_PayTrace_Block</class>
+			</paytrace>
+		</blocks>
+
+		<models>
+			<paytrace>
+				<class>Bradfellows_PayTrace_Model</class>
+			</paytrace>
+		</models>
+
+		<resources>
+			<paytrace_setup>
+				<setup>
+					<module>Bradfellows_PayTrace</module>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</paytrace_setup>
+
+			<paytrace_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</paytrace_write>
+
+			<paytrace_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</paytrace_read>
+		</resources>
+
+		<helpers>
+			<bradfellows_paytrace>
+				<class>Bradfellows_Paytrace_Helper</class>
+			</bradfellows_paytrace>
+		</helpers>
+	</global>
+
+	<frontend>
+		<routers>
+			<paytrace>
+				<use>standard</use>
+				<args>
+					<module>Bradfellows_PayTrace</module>
+					<frontName>tokenizedpayments</frontName>
+				</args>
+			</paytrace>
+		</routers>
+
+		<layout>
+			<updates>
+				<bradfellows_paytrace module="Bradfellows_PayTrace">
+					<file>bradfellows_paytrace.xml</file>
+				</bradfellows_paytrace>
+			</updates>
+		</layout>
+	</frontend>
+
+	<default>
+		<payment>
+			<paytrace>
+				<active>1</active>
+				<model>paytrace/paymentMethod</model>
+				<order_status>pending</order_status>
+				<title>Credit Card (MicroL3)</title>
+				<cctypes>VI,MC</cctypes>
+				<payment_action>authorize</payment_action>
+				<allowspecific>0</allowspecific>
+				<trans_key></trans_key>
+			</paytrace>
+		</payment>
+	</default>
+</config>
