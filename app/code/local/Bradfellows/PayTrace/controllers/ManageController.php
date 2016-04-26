@@ -24,7 +24,7 @@ class Bradfellows_PayTrace_ManageController extends Mage_Core_Controller_Front_A
 
 	// front action for adding customer profile to paytrace,
 	// and if successful adds the less sensitive metadata
-	// to micro's offsite storage
+	// to offsite storage
 	//TODO: make this call a add method from the payment method model
 	public function addAction(){
 
@@ -156,8 +156,7 @@ class Bradfellows_PayTrace_ManageController extends Mage_Core_Controller_Front_A
 	//TODO: figure out how to get this into the payment method model and call it from here
 	private function getStoredPayments($customer_id)
 	{
-		$url = 'http://my.service.url/index.php/tkn/listItems';
-		//$url = 'http://192.168.50.132/microk12-ci/index.php/tkn/listItems';
+		$url = 'http://my.service.url/index.php/tkn/listItems'; ///todo make configurable
 		$data = array('customerid'=>md5($customer_id));
 
 		$options = array(
