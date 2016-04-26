@@ -302,7 +302,7 @@ class Bradfellows_PayTrace_Model_PaymentMethod extends Mage_Paygate_Model_Author
 		$customer_id = $customer_data->getEmail();
 
 		//request info
-		$url = 'http://service.microk12.com/index.php/tkn/listItems';
+		$url = 'PATH TO TOKEN STORAGE';
 		$data = array('customerid'=>md5($customer_id));
 
 		$options = array(
