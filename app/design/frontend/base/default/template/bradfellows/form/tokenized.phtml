@@ -36,8 +36,7 @@
 		<?php
 		function getStoredPayments($customer_id)
 		{
-			$url = 'http://service.microk12.com/index.php/tkn/listItems';
-			//$url = 'http://192.168.50.132/microk12-ci/index.php/tkn/listItems';
+			$url = 'URL TO LIST STORED PAYMENT TYPES'; //todo make configurable
 			$data = array('customerid'=>md5($customer_id));
 			
 			$options = array(
