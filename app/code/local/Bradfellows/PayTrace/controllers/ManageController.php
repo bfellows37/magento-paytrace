@@ -176,12 +176,10 @@ class Bradfellows_PayTrace_ManageController extends Mage_Core_Controller_Front_A
 	// TODO: put this in the payment method model and call it there
 	private function addPaytraceProfile($postdata)
 	{
-		//$methodModel = ;
-		//Mage::log(Mage::getModel('MicroK12_PayTrace_Model_PaymentMethod')->getConfigData("paytrace_password"));
 
 		$transactionData = array(
-			'UN' => self::DEMO_ACCOUNT ? 'demo123' : Mage::getModel('MicroK12_PayTrace_Model_PaymentMethod')->getConfigData("paytrace_user"),
-			'PSWD' => self::DEMO_ACCOUNT ? 'demo123' : Mage::getModel('MicroK12_PayTrace_Model_PaymentMethod')->getConfigData("paytrace_password"),
+			'UN' => self::DEMO_ACCOUNT ? 'demo123' : Mage::getModel('Bradfellows_PayTrace_Model_PaymentMethod')->getConfigData("paytrace_user"),
+			'PSWD' => self::DEMO_ACCOUNT ? 'demo123' : Mage::getModel('Bradfellows_PayTrace_Model_PaymentMethod')->getConfigData("paytrace_password"),
 			'TERMS' => 'Y',
 			'METHOD' => 'CreateCustomer',
 			'CUSTID' => md5($postdata->customer_id)."_".time(),
@@ -236,8 +234,8 @@ class Bradfellows_PayTrace_ManageController extends Mage_Core_Controller_Front_A
 	private function removePaytraceProfile($token_id)
 	{
 		$transactionData = array(
-			'UN' => self::DEMO_ACCOUNT ? 'demo123' : Mage::getModel('MicroK12_PayTrace_Model_PaymentMethod')->getConfigData("paytrace_user"),
-			'PSWD' => self::DEMO_ACCOUNT ? 'demo123' : Mage::getModel('MicroK12_PayTrace_Model_PaymentMethod')->getConfigData("paytrace_password"),
+			'UN' => self::DEMO_ACCOUNT ? 'demo123' : Mage::getModel('Bradfellows_PayTrace_Model_PaymentMethod')->getConfigData("paytrace_user"),
+			'PSWD' => self::DEMO_ACCOUNT ? 'demo123' : Mage::getModel('Bradfellows_PayTrace_Model_PaymentMethod')->getConfigData("paytrace_password"),
 			'TERMS' => 'Y',
 			'METHOD' => 'DeleteCustomer',
 			'CUSTID' => $token_id,
