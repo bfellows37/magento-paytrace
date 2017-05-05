@@ -75,7 +75,7 @@
 				<active>1</active>
 				<model>paytrace/paymentMethod</model>
 				<order_status>pending</order_status>
-				<title>Credit Card (MicroL3)</title>
+				<title>Credit Card (Paytrace L3)</title>
 				<cctypes>VI,MC</cctypes>
 				<payment_action>authorize</payment_action>
 				<allowspecific>0</allowspecific>

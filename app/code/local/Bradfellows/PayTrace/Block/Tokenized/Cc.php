@@ -1,6 +1,6 @@
 <?php
 
-class MicroK12_PayTrace_Block_Tokenized_Cc 
+class Bradfellows_PayTrace_Block_Tokenized_Cc 
     extends Mage_Paygate_Block_Authorizenet_Form_Cc
 {
     
@@ -21,4 +21,3 @@ class MicroK12_PayTrace_Block_Tokenized_Cc
     }
 
 }
-
